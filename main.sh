@@ -1,46 +1,55 @@
+
 #!/bin/bash
 
-# Yiğit Özcan
-# 2420171050
-# Sertifika 1: BURAYA_LINK
-# Sertifika 2: BURAYA_LINK
-# Sertifika 3: BURAYA_LINK
+# =========================
+# İSİM SOYİSİM: Yiğit Özcan
+# ÖĞRENCİ NO: 2420171050
+# =========================
 
-LOGFILE="report.log"
+# SERTİFİKA BAĞLANTILARI
+# 1) Docker Temelleri
+# https://www.btkakademi.gov.tr/portal/certificate/validate?certificateId=nKqhn7Lk17
+# 2) Siber Güvenlikte Linux İşletim Sistemleri
+# https://www.btkakademi.gov.tr/portal/certificate/validate?certificateId=4qgueDgMxE
+# 3) Linux Bash Script Eğitimi
+# https://credsverse.com/credentials/25db2391-4ea8-44e2-a9c7-6021c97d19e3
 
-echo "[$(date '+%Y-%m-%dT%H:%M:%S')] Script Başlatıldı" > "$LOGFILE"
+LOG_DOSYASI="report.log"
+SIFRELI_DOSYA="report.log.gpg"
 
-echo "===== DONANIM BİLGİLERİ =====" >> "$LOGFILE"
+# ISO formatında tarih ve saat
+echo "BAŞLANGIÇ: $(date -Iseconds)" > "$LOG_DOSYASI"
 
-echo "İşlemci:" >> "$LOGFILE"
-system_profiler SPHardwareDataType | grep "Processor Name" >> "$LOGFILE"
+# =========================
+# SİSTEM BİLGİLERİ
+# =========================
+echo "===== SİSTEM BİLGİLERİ =====" >> "$LOG_DOSYASI"
 
-echo "" >> "$LOGFILE"
+system_profiler SPHardwareDataType >> "$LOG_DOSYASI"
 
-echo "RAM:" >> "$LOGFILE"
-system_profiler SPHardwareDataType | grep "Memory" >> "$LOGFILE"
+echo "===== AĞ BİLGİLERİ =====" >> "$LOG_DOSYASI"
+ifconfig >> "$LOG_DOSYASI"
 
-echo "" >> "$LOGFILE"
+# =========================
+# KULLANICI PAROLA GİRİŞİ
+# =========================
+read -s -p "Parola giriniz (MYO+202): " PAROLA
+echo
 
-echo "UUID:" >> "$LOGFILE"
-system_profiler SPHardwareDataType | grep "Hardware UUID" >> "$LOGFILE"
+# Parola kontrolü
+if [ "$PAROLA" != "MYO+202" ]; then
+  echo "Hatalı parola!"
+  exit 1
+fi
 
-echo "" >> "$LOGFILE"
+# =========================
+# GPG ŞİFRELEME (AES256)
+# =========================
+gpg --batch --yes --passphrase "$PAROLA" \
+    --symmetric --cipher-algo AES256 \
+    "$LOG_DOSYASI"
 
-echo "MAC Bilgisi:" >> "$LOGFILE"
-ifconfig en0 | grep ether >> "$LOGFILE"
+# Orijinal dosyayı sil
+rm -f "$LOG_DOSYASI"
 
-echo "" >> "$LOGFILE"
-
-read -sp "Parola giriniz (MYO+202): " PAROLA
-echo ""
-
-gpg --batch --yes \
---passphrase "$PAROLA" \
---symmetric \
---cipher-algo AES256 \
-report.log
-
-rm -f report.log
-
-echo "Şifreleme tamamlandı. report.log.gpg oluşturuldu."
+echo "Şifreleme tamamlandı. $SIFRELI_DOSYA oluşturuldu."
