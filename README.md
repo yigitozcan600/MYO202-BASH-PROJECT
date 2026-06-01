@@ -31,3 +31,13 @@ Bu proje, Linux Bash scripting kullanılarak sistem bilgilerini toplayan ve bu b
 
 
 
+## 🎓 Sertifika Bağlantıları
+
+- Docker Temelleri  
+  https://www.btkakademi.gov.tr/portal/certificate/validate?certificateId=nKqhn7Lk17
+
+- Siber Güvenlikte Linux İşletim Sistemleri  
+  https://www.btkakademi.gov.tr/portal/certificate/validate?certificateId=4qgueDgMxE
+
+- Linux Bash Script Eğitimi  
+  https://credsverse.com/credentials/25db2391-4ea8-44e2-a9c7-6021c97d19e3
